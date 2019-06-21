@@ -13,6 +13,13 @@ exports.createPages = ({ graphql, actions }) => {
           }
         }
       }
+      allContentfulInstructor {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
     }
   `).then(result => {
     if (result.errors) {
@@ -23,6 +30,15 @@ exports.createPages = ({ graphql, actions }) => {
       createPage({
         path: `/lessons/${edge.node.slug}`,
         component: lessonTemplate,
+        context: {
+          slug: edge.node.slug,
+        },
+      })
+    })
+    result.data.allContentfulInstructor.edges.forEach(edge => {
+      createPage({
+        path: `/instructors/${edge.node.slug}`,
+        component: instructorTemplate,
         context: {
           slug: edge.node.slug,
         },
